@@ -1,0 +1,14 @@
+Reflexionsaufgabe
+    Trennung von Logik und "Sprachenfluff"
+
+Aufgabe 1
+    1.
+        Dokumentation
+        "Debuggingersatz"
+        Sicherheitsnetz
+        Dopaminquelle
+
+    2.
+        Code wird testbarer
+        API mehr auf Anwender fokussiert
+        
