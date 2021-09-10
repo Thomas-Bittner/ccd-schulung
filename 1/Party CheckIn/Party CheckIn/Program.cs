@@ -25,6 +25,7 @@ namespace PartyCheckIn
 				var greeting = checkInManager.GetGreeting(name);
 				Console.WriteLine(greeting);
 			}
+
 			// ReSharper disable once FunctionNeverReturns
 		}
 	}
