@@ -1,2 +1,5 @@
-
 *.pdf
+
+.vs
+obj
+bin
