@@ -4,7 +4,7 @@ namespace PartyCheckIn
 {
 	internal static class Program
 	{
-		public static void Main(string[] args)
+		public static void Main()
 		{
 			var guestDatabase = new GuestDatabase("guests.sqlite");
 			guestDatabase.Initialize();
@@ -25,6 +25,7 @@ namespace PartyCheckIn
 				var greeting = checkInManager.GetGreeting(name);
 				Console.WriteLine(greeting);
 			}
+			// ReSharper disable once FunctionNeverReturns
 		}
 	}
 }
