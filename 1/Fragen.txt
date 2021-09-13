@@ -1,0 +1,2 @@
+* Akzeptanztests mit MockUps?
+* Entwurf vor Codierung: Kein TDD?

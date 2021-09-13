@@ -1,0 +1,19 @@
+Reflexionsaufgabe:
+Wachsen der Problemmenge bei einfachen Problemen
+
+1)
+    Mathemathischer Ausdruck: Einfach
+    Game-of-Life: Einfach
+    NQueen: Einfach
+    Binärzahl: Trivial
+
+2)
+    1)
+        1492: MCDXCII
+    2)
+        string ToRome(this int number) 
+
+    Testfälle:
+    - Länge der römischen Zahl
+    - Anzahl verschiedener Symbole
+    - Subtraktionsregel
