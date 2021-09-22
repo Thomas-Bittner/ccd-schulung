@@ -1,0 +1,7 @@
+Reflexion:
+* Römische Zahlen aus anderem Blickwinkel (einfach vs. kompliziert)
+
+1)
+* string[] SplitIntoRomanLiterals(string number) "MCMLXXXIV" => ["M", "CM", "L", "X", "X", "X", "IV"]
+* int ToRomanValue(string literal) "CM" => 900
+* int Sum(IEnumerable<int> numbers) [1, 2, 3] => 6

@@ -4,7 +4,7 @@ Wachsen der Problemmenge bei einfachen Problemen
 1)
     Mathemathischer Ausdruck: Einfach
     Game-of-Life: Einfach
-    NQueen: Einfach
+    NQueen: Einfach/Chaotisch
     Binärzahl: Trivial
 
 2)
