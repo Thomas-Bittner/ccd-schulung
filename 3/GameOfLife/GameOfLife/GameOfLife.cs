@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GameOfLife
 {
@@ -24,6 +23,8 @@ namespace GameOfLife
 
 		public int Width { get; }
 		public int Height { get; }
+		public int Generation { get; set; }
+		public string Name { get; set; }
 
 		public State this[int x, int y]
 		{
@@ -38,22 +39,21 @@ namespace GameOfLife
 
 		public static void Evolve(int numberOfGenerations, string seedWorldFilename, Action onGeneration)
 		{
-			var fileBaseName = Path.GetFileNameWithoutExtension(seedWorldFilename);
-			DeleteOldFiles(fileBaseName);
-
 			var currentWorld = FromFile(seedWorldFilename);
+			currentWorld.DeleteOldFiles();
+
 			for (var i = 1; i <= numberOfGenerations; i++)
 			{
 				currentWorld = currentWorld.CalculateNextGeneration();
-				currentWorld.Save($"{fileBaseName}-{i}.txt");
+				currentWorld.Save();
 				onGeneration();
 			}
 		}
 
-		private static void DeleteOldFiles(string baseName)
+		private void DeleteOldFiles()
 		{
 			var directory = new DirectoryInfo(".");
-			foreach (var file in directory.EnumerateFiles($"{baseName}-*.txt"))
+			foreach (var file in directory.EnumerateFiles($"{Name}-*.txt"))
 			{
 				file.Delete();
 			}
@@ -62,7 +62,10 @@ namespace GameOfLife
 		public static World FromFile(string filename)
 		{
 			var fileContent = File.ReadAllText(filename);
-			return FromString(fileContent);
+			var world = FromString(fileContent);
+			world.Name = Path.GetFileNameWithoutExtension(filename);
+			world.Generation = 0;
+			return world;
 		}
 
 		public static World FromString(string serializedWorld)
@@ -74,16 +77,18 @@ namespace GameOfLife
 
 			var world = new World(worldWidth, worldHeight);
 			for (var y = 0; y < worldHeight; y++)
-			for (var x = 0; x < worldWidth; x++)
-				switch (lines[y][x])
-				{
-					case 'X':
-						world[x, y] = State.Alive;
-						break;
-					case '.':
-						world[x, y] = State.Dead;
-						break;
-				}
+			{
+				for (var x = 0; x < worldWidth; x++)
+					switch (lines[y][x])
+					{
+						case 'X':
+							world[x, y] = State.Alive;
+							break;
+						case '.':
+							world[x, y] = State.Dead;
+							break;
+					}
+			}
 
 			return world;
 		}
@@ -110,35 +115,27 @@ namespace GameOfLife
 			return result.Trim();
 		}
 
-		public void Save(string filename)
+		public void Save()
 		{
+			var filename = $"{Name}-{Generation}.txt";
 			File.WriteAllText(filename, this.ToString());
 		}
 
 		public World CalculateNextGeneration()
 		{
-			var nextGeneration = new World(Width, Height);
+			var nextGeneration = new World(Width, Height)
+			{
+				Name = Name,
+				Generation = Generation + 1
+			};
+
 			for (var y = 0; y < Height; y++)
 			{
 				for (var x = 0; x < Width; x++)
 				{
 					var numberOfNeighbors = GetNumberOfAliveNeighbors(x, y);
-					switch (_map[x, y])
-					{
-						case State.Alive when numberOfNeighbors < 2:
-						case State.Alive when numberOfNeighbors > 3:
-							nextGeneration[x, y] = State.Dead;
-							break;
-						case State.Alive:
-							nextGeneration[x, y] = State.Alive;
-							break;
-						case State.Dead when numberOfNeighbors == 3:
-							nextGeneration[x,y] = State.Alive;
-							break;
-						case State.Dead:
-							nextGeneration[x, y] = State.Dead;
-							break;
-					}
+					var currentState = this[x, y];
+					nextGeneration[x, y] = CalculateNextState(currentState, numberOfNeighbors);
 				}
 			}
 
@@ -159,6 +156,23 @@ namespace GameOfLife
 				this[x + 1, y + 1]
 			};
 			return neighbors.Count(state => state == State.Alive);
+		}
+
+		private static State CalculateNextState(State oldState, int numberOfNeighbors)
+		{
+			switch (oldState)
+			{
+				case State.Alive when numberOfNeighbors < 2:
+				case State.Alive when numberOfNeighbors > 3:
+					return State.Dead;
+				case State.Alive:
+					return State.Alive;
+				case State.Dead when numberOfNeighbors == 3:
+					return State.Alive;
+				case State.Dead:
+				default:
+					return State.Dead;
+			}
 		}
 	}
 }

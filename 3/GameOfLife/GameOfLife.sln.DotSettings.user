@@ -2,6 +2,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6e58a8e9_002Da6b8_002D4c65_002D9e40_002Df2ada36541f8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CalculateNextGeneration" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::A1E644B6-D996-4C03-910B-F8BCDBFC78FE::net5.0::Test.GameOfLifeTest.CalculateNextGeneration&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A1E644B6-D996-4C03-910B-F8BCDBFC78FE::net5.0::Test.GameOfLifeTest.AcceptenceTest_Block&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A1E644B6-D996-4C03-910B-F8BCDBFC78FE::net5.0::Test.GameOfLifeTest.AcceptenceTest_Blinker2&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A1E644B6-D996-4C03-910B-F8BCDBFC78FE::net5.0::Test.GameOfLifeTest.AcceptenceTest_Blinker1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bb4623f4_002Dae3f_002D49c1_002D84db_002D342ff27502c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FromString_SingleLivingCell" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using Xunit;
 
@@ -8,6 +9,46 @@ namespace Test
 {
 	public class GameOfLifeTest
 	{
+		[Fact]
+		public void AcceptenceTest_Block()
+		{
+			File.WriteAllText("block.txt", "....\n.XX.\n.XX.\n....");
+			var callbackCalled = 0;
+
+			GameOfLife.World.Evolve(1, "block.txt", () => { callbackCalled++; });
+			callbackCalled.Should().Be(1);
+			File.Exists("block-1.txt").Should().Be(true);
+			File.ReadAllText("block-1.txt").Should().Be("....\n.XX.\n.XX.\n....");
+		}
+
+		[Fact]
+		public void AcceptenceTest_Blinker2()
+		{
+			File.WriteAllText("blinker.txt", ".....\n.....\n.XXX.\n.....\n.....");
+			var callbackCalled = 0;
+
+			GameOfLife.World.Evolve(2, "blinker.txt", () => { callbackCalled++; });
+			callbackCalled.Should().Be(2);
+			File.Exists("blinker-1.txt").Should().Be(true);
+			File.Exists("blinker-2.txt").Should().Be(true);
+			File.ReadAllText("blinker-1.txt").Should().Be(".....\n..X..\n..X..\n..X..\n.....");
+			File.ReadAllText("blinker-2.txt").Should().Be(".....\n.....\n.XXX.\n.....\n.....");
+		}
+
+		[Fact]
+		public void AcceptenceTest_Blinker1()
+		{
+			File.WriteAllText("blinker.txt", ".....\n.....\n.XXX.\n.....\n.....");
+			File.WriteAllText("blinker-2.txt", ".....\n.....\n.XXX.\n.....\n.....");
+			var callbackCalled = 0;
+
+			GameOfLife.World.Evolve(1, "blinker.txt", () => { callbackCalled++; });
+			callbackCalled.Should().Be(1);
+			File.Exists("blinker-1.txt").Should().Be(true);
+			File.ReadAllText("blinker-1.txt").Should().Be(".....\n..X..\n..X..\n..X..\n.....");
+			File.Exists("blinker-2.txt").Should().Be(false);
+		}
+
 		[Fact]
 		public void FromString_ShouldReturnEmptyWorldForEmptyString()
 		{
