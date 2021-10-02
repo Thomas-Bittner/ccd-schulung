@@ -15,28 +15,34 @@ namespace CsvTable
 			return csvTableCreator.ToString();
 		}
 
-		public static CsvTableCreator FromCsv(string csv)
+		private static CsvTableCreator FromCsv(string csv)
 		{
-			var lines = csv.Split('\n');
+			var lines = SplitCsvIntoLines(csv);
 			var header = ExtractHeader(lines[0]);
-			var content = ExtractContent(lines.Skip(1).ToArray());
-			content = content.SkipLast(1);
+			var content = ExtractContent(lines.Skip(1));
 			return new CsvTableCreator(header, content);
 		}
+
+		private static string[] SplitCsvIntoLines(string csv)
+			=> csv.Split('\n');
 
 		public static IEnumerable<string> ExtractHeader(string header)
 			=> header.Split(';');
 
 		public static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
-			=> content.Select(line => line.Split(';'));
+		{
+			var result = content.Select(line => line.Split(';'));
+			result = result.SkipLast(1);
+			return result;
+		}
 
 		public CsvTableCreator(IEnumerable<string> header, IEnumerable<IEnumerable<string>> content)
 		{
-			this._header = header;
-			this._content = content;
+			_header = header;
+			_content = content;
 		}
 
-		public string ToString()
+		public override string ToString()
 		{
 			var columnWidths = CalculateColumnWidths();
 			return ToString(columnWidths);
@@ -45,6 +51,7 @@ namespace CsvTable
 		public IEnumerable<int> CalculateColumnWidths()
 		{
 			var result = _header.Select(title => title.Length);
+			// ReSharper disable once LoopCanBeConvertedToQuery
 			foreach (var row in _content)
 			{
 				var columnWidths = row.Select(entry => entry.Length);
@@ -55,10 +62,23 @@ namespace CsvTable
 
 		public string ToString(IEnumerable<int> columnWidths)
 		{
+			// ReSharper disable PossibleMultipleEnumeration
 			var headerLine = ToReadableLine(_header, columnWidths);
 			var borderLine = CreateBorderLine(columnWidths);
+			var content = CreateContentBlock(columnWidths);
+			return ConcatenateLines(new List<string> {headerLine, borderLine, content});
+		}
+
+		private static string CreateBorderLine(IEnumerable<int> columnWidths)
+		{
+			var minuses = columnWidths.Select(width => new string('-', width));
+			return string.Join("+", minuses) + '+';
+		}
+
+		private string CreateContentBlock(IEnumerable<int> columnWidths)
+		{
 			var contentLines = _content.Select(line => ToReadableLine(line, columnWidths));
-			return string.Join('\n', headerLine, borderLine, string.Join('\n', contentLines)) + '\n';
+			return string.Join('\n', contentLines);
 		}
 
 		private static string ToReadableLine(IEnumerable<string> lineContents, IEnumerable<int> columnWidths)
@@ -67,10 +87,7 @@ namespace CsvTable
 			return string.Join("|", paddedLineContents) + '|';
 		}
 
-		private static string CreateBorderLine(IEnumerable<int> columnWidths)
-		{
-			var minuses = columnWidths.Select(width => new string('-', width));
-			return string.Join("+", minuses) + '+';
-		}
+		private static string ConcatenateLines(IEnumerable<string> lines)
+			=> string.Join('\n', lines) + '\n';
 	}
 }
