@@ -17,7 +17,7 @@ namespace Test
 		[Fact]
 		public void ExtractContent()
 		{
-			string[] input = new string[]
+			var input = new[]
 			{
 				"Peter Pan;Am Hang 5;12345 Einsam;42",
 				"Maria Schmitz;Kölner Straße 45;50123 Köln;43",
@@ -31,6 +31,19 @@ namespace Test
 				{"Paul Meier", "Münchener Weg 1", "87654 München", "65"},
 				{"Bruce Wayne", "", "Gotham City", "36"}
 			}, CsvTableCreator.ExtractContent(input));
+		}
+
+		[Fact]
+		public void CalculateColumnWidths()
+		{
+			var headers = new[] {"Long Title", "A", "B"};
+			var content = new[,]
+			{
+				{"Foo", "LongA", "B"},
+				{"Bar", "A", "LongB"}
+			};
+			var table = new CsvTableCreator(headers, content);
+			table.CalculateColumnWidths().Should().Equal(10, 5, 5);
 		}
 	}
 }
