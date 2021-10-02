@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CsvTable
 {
 	public class CsvTableCreator
 	{
-		private string[] _header;
-		private string[,] _content;
+		private readonly IEnumerable<string> _header;
+		private readonly IEnumerable<IEnumerable<string>> _content;
 
 		public static CsvTableCreator FromCsv(string csv)
 		{
@@ -16,40 +17,47 @@ namespace CsvTable
 			return new CsvTableCreator(header, content);
 		}
 
-		public static string[] ExtractHeader(string header)
+		public static IEnumerable<string> ExtractHeader(string header)
 			=> header.Split(';');
 
-		public static string[,] ExtractContent(string[] content)
-		{
-			var splittedLines = content.Select(line => line.Split(';')).ToArray();
-			var result = new string[splittedLines.Length, splittedLines[0].Length];
-			for (var row = 0; row < splittedLines.Length; row++)
-			{
-				for (var column = 0; column < splittedLines[0].Length; column++)
-				{
-					result[row, column] = splittedLines[row][column];
-				}
-			}
-			return result;
-		}
+		public static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
+			=> content.Select(line => line.Split(';'));
 
-		public CsvTableCreator(string[] header, string[,] content)
+		public CsvTableCreator(IEnumerable<string> header, IEnumerable<IEnumerable<string>> content)
 		{
 			this._header = header;
 			this._content = content;
 		}
 
-		public int[] CalculateColumnWidths()
+		public IEnumerable<int> CalculateColumnWidths()
 		{
-			var result = _header.Select(title => title.Length).ToArray();
-			for (var row = 0; row < _content.GetLength(0); row++)
+			var result = _header.Select(title => title.Length);
+			foreach (var row in _content)
 			{
-				for (var column = 0; column < _content.GetLength(1); column++)
-				{
-					result[column] = Math.Max(result[column], _content[row, column].Length);
-				}
+				var columnWidths = row.Select(entry => entry.Length);
+				result = result.Zip(columnWidths, Math.Max);
 			}
 			return result;
+		}
+
+		public string ToString(int[] columnWidths)
+		{
+			var headerLine = ToReadableLine(_header, columnWidths);
+			var borderLine = CreateBorderLine(columnWidths);
+			var contentLines = _content.Select(line => ToReadableLine(line, columnWidths));
+			return string.Join('\n', headerLine, borderLine, string.Join('\n', contentLines));
+		}
+
+		private static string ToReadableLine(IEnumerable<string> lineContents, IEnumerable<int> columnWidths)
+		{
+			var paddedLineContents = lineContents.Zip(columnWidths, (entry, width) => entry.PadRight(width));
+			return string.Join("|", paddedLineContents);
+		}
+
+		private static string CreateBorderLine(IEnumerable<int> columnWidths)
+		{
+			var minuses = columnWidths.Select(width => new string('-', width));
+			return string.Join("+", minuses);
 		}
 	}
 }

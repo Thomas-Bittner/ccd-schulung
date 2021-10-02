@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -24,26 +26,39 @@ namespace Test
 				"Paul Meier;Münchener Weg 1;87654 München;65",
 				"Bruce Wayne;;Gotham City;36"
 			};
-			
-			Assert.Equal(new string[4,4] {
-				{"Peter Pan", "Am Hang 5", "12345 Einsam", "42"},
-				{"Maria Schmitz", "Kölner Straße 45", "50123 Köln", "43"},
-				{"Paul Meier", "Münchener Weg 1", "87654 München", "65"},
-				{"Bruce Wayne", "", "Gotham City", "36"}
-			}, CsvTableCreator.ExtractContent(input));
+
+			var content = CsvTableCreator.ExtractContent(input).ToArray();
+			content.Length.Should().Be(4);
+			content[0].Should().Equal(new List<string>{"Peter Pan", "Am Hang 5", "12345 Einsam", "42"});
+			content[1].Should().Equal(new List<string> {"Maria Schmitz", "Kölner Straße 45", "50123 Köln", "43"});
+			content[2].Should().Equal(new List<string> {"Paul Meier", "Münchener Weg 1", "87654 München", "65"});
+			content[3].Should().Equal(new List<string> {"Bruce Wayne", "", "Gotham City", "36"});
 		}
 
 		[Fact]
 		public void CalculateColumnWidths()
 		{
 			var headers = new[] {"Long Title", "A", "B"};
-			var content = new[,]
+			var content = new List<IEnumerable<string>>
 			{
-				{"Foo", "LongA", "B"},
-				{"Bar", "A", "LongB"}
+				new [] {"Foo", "LongA", "B"},
+				new [] {"Bar", "A", "LongB"}
 			};
 			var table = new CsvTableCreator(headers, content);
 			table.CalculateColumnWidths().Should().Equal(10, 5, 5);
+		}
+
+		[Fact]
+		public void SerializeAsReadableString()
+		{
+			var headers = new[] { "Long Title", "A", "B" };
+			var content = new List<IEnumerable<string>>
+			{
+				new[] {"Foo", "LongA", "B"},
+				new[] {"Bar", "A", "LongB"}
+			};
+			var table = new CsvTableCreator(headers, content);
+			table.ToString(new int[]{10,5,5}).Should().Be("Long Title|A    |B    \n----------+-----+-----\nFoo       |LongA|B    \nBar       |A    |LongB");
 		}
 	}
 }
