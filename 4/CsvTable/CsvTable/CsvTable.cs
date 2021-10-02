@@ -6,8 +6,8 @@ namespace CsvTable
 {
 	public class CsvTableCreator
 	{
-		private readonly IEnumerable<string> _header;
-		private readonly IEnumerable<IEnumerable<string>> _content;
+		public IEnumerable<string> Header { get; set; }
+		public IEnumerable<IEnumerable<string>> Content { get; set; }
 
 		public static string Tabellieren(string csvInput)
 		{
@@ -15,31 +15,27 @@ namespace CsvTable
 			return csvTableCreator.ToString();
 		}
 
-		private static CsvTableCreator FromCsv(string csv)
+		public static CsvTableCreator FromCsv(string csv)
 		{
 			var lines = SplitCsvIntoLines(csv);
-			var header = ExtractHeader(lines[0]);
-			var content = ExtractContent(lines.Skip(1));
-			return new CsvTableCreator(header, content);
+			return new CsvTableCreator
+			{
+				Header = ExtractHeader(lines[0]),
+				Content = ExtractContent(lines.Skip(1))
+			};
 		}
 
 		private static string[] SplitCsvIntoLines(string csv)
 			=> csv.Split('\n');
 
-		public static IEnumerable<string> ExtractHeader(string header)
+		private static IEnumerable<string> ExtractHeader(string header)
 			=> header.Split(';');
 
-		public static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
+		private static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
 		{
 			var result = content.Select(line => line.Split(';'));
 			result = result.SkipLast(1);
 			return result;
-		}
-
-		public CsvTableCreator(IEnumerable<string> header, IEnumerable<IEnumerable<string>> content)
-		{
-			_header = header;
-			_content = content;
 		}
 
 		public override string ToString()
@@ -48,22 +44,25 @@ namespace CsvTable
 			return ToString(columnWidths);
 		}
 
-		public IEnumerable<int> CalculateColumnWidths()
+		private IEnumerable<int> CalculateColumnWidths()
 		{
-			var result = _header.Select(title => title.Length);
+			var result = CalculateColumnWidthsForLine(Header);
 			// ReSharper disable once LoopCanBeConvertedToQuery
-			foreach (var row in _content)
+			foreach (var row in Content)
 			{
-				var columnWidths = row.Select(entry => entry.Length);
+				var columnWidths = CalculateColumnWidthsForLine(row);
 				result = result.Zip(columnWidths, Math.Max);
 			}
 			return result;
 		}
 
+		private static IEnumerable<int> CalculateColumnWidthsForLine(IEnumerable<string> line)
+			=> line.Select(entry => entry.Length);
+
 		public string ToString(IEnumerable<int> columnWidths)
 		{
 			// ReSharper disable PossibleMultipleEnumeration
-			var headerLine = ToReadableLine(_header, columnWidths);
+			var headerLine = ToReadableLine(Header, columnWidths);
 			var borderLine = CreateBorderLine(columnWidths);
 			var content = CreateContentBlock(columnWidths);
 			return ConcatenateLines(new List<string> {headerLine, borderLine, content});
@@ -77,7 +76,7 @@ namespace CsvTable
 
 		private string CreateContentBlock(IEnumerable<int> columnWidths)
 		{
-			var contentLines = _content.Select(line => ToReadableLine(line, columnWidths));
+			var contentLines = Content.Select(line => ToReadableLine(line, columnWidths));
 			return string.Join('\n', contentLines);
 		}
 
