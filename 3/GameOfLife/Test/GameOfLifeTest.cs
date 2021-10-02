@@ -42,7 +42,7 @@ namespace Test
 			File.WriteAllText("blinker-2.txt", ".....\n.....\n.XXX.\n.....\n.....");
 			var callbackCalled = 0;
 
-			GameOfLife.World.Evolve(1, "blinker.txt", () => { callbackCalled++; });
+			World.Evolve(1, "blinker.txt", () => { callbackCalled++; });
 			callbackCalled.Should().Be(1);
 			File.Exists("blinker-1.txt").Should().Be(true);
 			File.ReadAllText("blinker-1.txt").Should().Be(".....\n..X..\n..X..\n..X..\n.....");

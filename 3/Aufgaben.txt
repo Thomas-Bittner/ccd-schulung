@@ -1,5 +1,6 @@
 Reflexion:
 * Römische Zahlen aus anderem Blickwinkel (einfach vs. kompliziert)
+* Testen privater Methoden
 
 1)
 * string[] SplitIntoRomanLiterals(string number) "MCMLXXXIV" => ["M", "CM", "L", "X", "X", "X", "IV"]

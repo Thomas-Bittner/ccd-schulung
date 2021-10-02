@@ -1,0 +1,14 @@
+string Tabellieren(string)
+	DeserializeCsv(string)
+		string[] ExtractHeader(string) // determines columns
+		string[,] ExtractContent(string[]) // place both in appropriate class
+	
+	string ToTable()
+		DetermineColumnWidths()
+			int[] DetermineHeaderWidths()
+			int[] DetermineContentWidths()
+			*Linq*
+		string CreateHeader()
+		string CreateHeaderLine()
+		string CreateContent()
+		*join*
