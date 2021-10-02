@@ -10,6 +10,27 @@ namespace Test
 	public class CsvTableTest
 	{
 		[Fact]
+		public void DisplayCsvTable()
+		{
+			var csvInput =
+				"Name;Strasse;Ort;Alter\n" +
+				"Peter Pan;Am Hang 5;12345 Einsam;42\n" +
+				"Maria Schmitz;Kölner Straße 45;50123 Köln;43\n" +
+				"Paul Meier;Münchener Weg 1;87654 München;65\n" +
+				"Bruce Wayne;;Gotham City;36\n";
+
+			var readableOutput = CsvTableCreator.Tabellieren(csvInput);
+			readableOutput.Should().Be(
+				"Name         |Strasse         |Ort          |Alter|\n" +
+				"-------------+----------------+-------------+-----+\n" +
+				"Peter Pan    |Am Hang 5       |12345 Einsam |42   |\n" +
+				"Maria Schmitz|Kölner Straße 45|50123 Köln   |43   |\n" +
+				"Paul Meier   |Münchener Weg 1 |87654 München|65   |\n" +
+				"Bruce Wayne  |                |Gotham City  |36   |\n"
+			);
+		}
+
+		[Fact]
 		public void SplitHeader()
 		{
 			string input = "Name;Strasse;Ort;Alter";
@@ -58,7 +79,7 @@ namespace Test
 				new[] {"Bar", "A", "LongB"}
 			};
 			var table = new CsvTableCreator(headers, content);
-			table.ToString(new int[]{10,5,5}).Should().Be("Long Title|A    |B    \n----------+-----+-----\nFoo       |LongA|B    \nBar       |A    |LongB");
+			table.ToString(new int[]{10,5,5}).Should().Be("Long Title|A    |B    |\n----------+-----+-----+\nFoo       |LongA|B    |\nBar       |A    |LongB|\n");
 		}
 	}
 }
