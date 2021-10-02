@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CsvTable
 {
-	public class CsvTableCreator
+	public class CsvTableConverter
 	{
 		public IEnumerable<string> Header { get; set; }
 		public IEnumerable<IEnumerable<string>> Content { get; set; }
@@ -15,10 +15,10 @@ namespace CsvTable
 			return csvTableCreator.ToString();
 		}
 
-		public static CsvTableCreator FromCsv(string csv)
+		public static CsvTableConverter FromCsv(string csv)
 		{
 			var lines = SplitCsvIntoLines(csv);
-			return new CsvTableCreator
+			return new CsvTableConverter
 			{
 				Header = ExtractHeader(lines[0]),
 				Content = ExtractContent(lines.Skip(1))

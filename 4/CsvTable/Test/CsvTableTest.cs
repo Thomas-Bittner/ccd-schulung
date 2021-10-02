@@ -18,7 +18,7 @@ namespace Test
 			                        "Paul Meier;Münchener Weg 1;87654 München;65\n" +
 			                        "Bruce Wayne;;Gotham City;36\n";
 
-			var readableOutput = CsvTableCreator.Tabellieren(csvInput);
+			var readableOutput = CsvTableConverter.Tabellieren(csvInput);
 			readableOutput.Should().Be(
 				"Name         |Strasse         |Ort          |Alter|\n" +
 				"-------------+----------------+-------------+-----+\n" +
@@ -38,7 +38,7 @@ namespace Test
 			                        "Paul Meier;Münchener Weg 1;87654 München;65\n" +
 			                        "Bruce Wayne;;Gotham City;36\n";
 
-			var converter = CsvTableCreator.FromCsv(csvInput);
+			var converter = CsvTableConverter.FromCsv(csvInput);
 			converter.Header.Should().Equal("Name", "Strasse", "Ort", "Alter");
 
 			var content = converter.Content.ToArray();
@@ -52,7 +52,7 @@ namespace Test
 		[Fact]
 		public void SerializeAsReadableString()
 		{
-			var table = new CsvTableCreator
+			var table = new CsvTableConverter
 			{
 				Header = new[] { "Long Title", "A", "B" },
 				Content = new List<IEnumerable<string>>
