@@ -26,17 +26,13 @@ namespace CsvTable
 		}
 
 		private static string[] SplitCsvIntoLines(string csv)
-			=> csv.Split('\n');
+			=> csv.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
 		private static IEnumerable<string> ExtractHeader(string header)
 			=> header.Split(';');
 
 		private static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
-		{
-			var result = content.Select(line => line.Split(';'));
-			result = result.SkipLast(1);
-			return result;
-		}
+			=> content.Select(line => line.Split(';'));
 
 		public override string ToString()
 		{
