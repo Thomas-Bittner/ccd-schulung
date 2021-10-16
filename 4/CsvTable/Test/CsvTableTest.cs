@@ -62,7 +62,7 @@ namespace Test
 				}
 			};
 
-			table.ToString(new[]{10,5,5}).Should().Be(
+			table.ToString().Should().Be(
 				"Long Title|A    |B    |\n" +
 				"----------+-----+-----+\n" +
 				"Foo       |LongA|B    |\n" +

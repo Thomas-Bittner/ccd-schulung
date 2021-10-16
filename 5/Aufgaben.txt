@@ -1,0 +1,12 @@
+dynamic!
+
+Aufgabe 1
+ToDo 1
+
+Überlege, wie Parameter aus der Umwelt (Kommandozeile) nach Run() hinein kommen können:
+* void Run(string filePath, char separator)
+Überlege, wie das variable Trennzeichen an die entsprechende Logik unterhalb von Tabellieren() kommt:
+* Zusätzlicher Parameter (mit Default)
+Überlege, wie die Konsolenausgabe überprüft werden kann:
+* Konfigurierbarer Callback
+

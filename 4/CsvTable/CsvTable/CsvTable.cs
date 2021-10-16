@@ -9,30 +9,30 @@ namespace CsvTable
 		public IEnumerable<string> Header { get; set; }
 		public IEnumerable<IEnumerable<string>> Content { get; set; }
 
-		public static string Tabellieren(string csvInput)
+		public static string Tabellieren(string csvInput, char separator = ';')
 		{
-			var csvTableCreator = FromCsv(csvInput);
+			var csvTableCreator = FromCsv(csvInput, separator);
 			return csvTableCreator.ToString();
 		}
 
-		public static CsvTableConverter FromCsv(string csv)
+		public static CsvTableConverter FromCsv(string csv, char separator = ';')
 		{
 			var lines = SplitCsvIntoLines(csv);
 			return new CsvTableConverter
 			{
-				Header = ExtractHeader(lines[0]),
-				Content = ExtractContent(lines.Skip(1))
+				Header = ExtractHeader(lines[0], separator),
+				Content = ExtractContent(lines.Skip(1), separator)
 			};
 		}
 
 		private static string[] SplitCsvIntoLines(string csv)
 			=> csv.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-		private static IEnumerable<string> ExtractHeader(string header)
-			=> header.Split(';');
+		private static IEnumerable<string> ExtractHeader(string header, char separator)
+			=> header.Split(separator);
 
-		private static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content)
-			=> content.Select(line => line.Split(';'));
+		private static IEnumerable<IEnumerable<string>> ExtractContent(IEnumerable<string> content, char separator)
+			=> content.Select(line => line.Split(separator));
 
 		public override string ToString()
 		{

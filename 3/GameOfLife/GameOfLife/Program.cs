@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
 	class Program
 	{
@@ -12,7 +6,9 @@ namespace GameOfLife
 		{
 			var numberOfGenerations = int.Parse(args[0]);
 			var fileName = args[1];
-			World.Evolve(numberOfGenerations, fileName, () => { });
+
+			var application = new Application(numberOfGenerations, fileName);
+			application.Run();
 		}
 	}
 }

@@ -1,6 +1,5 @@
-using System;
-using System.IO;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 using GameOfLife;
@@ -12,41 +11,57 @@ namespace Test
 		[Fact]
 		public void AcceptenceTest_Block()
 		{
-			File.WriteAllText("block.txt", "....\n.XX.\n.XX.\n....");
-			var callbackCalled = 0;
+			var fileSystem = Substitute.For<IFileSystem>();
+			fileSystem.ReadAllText("block.txt").Returns("....\n.XX.\n.XX.\n....");
 
-			GameOfLife.World.Evolve(1, "block.txt", () => { callbackCalled++; });
+			var callbackCalled = 0;
+			var application = new Application(1, "block.txt")
+			{
+				OnGeneration = () => { callbackCalled++; },
+				FileSystem = fileSystem
+			};
+			application.Run();
+
 			callbackCalled.Should().Be(1);
-			File.Exists("block-1.txt").Should().Be(true);
-			File.ReadAllText("block-1.txt").Should().Be("....\n.XX.\n.XX.\n....");
+			fileSystem.Received().WriteAllText("block-1.txt", "....\n.XX.\n.XX.\n....");
 		}
 
 		[Fact]
 		public void AcceptenceTest_Blinker2()
 		{
-			File.WriteAllText("blinker.txt", ".....\n.....\n.XXX.\n.....\n.....");
+			var fileSystem = Substitute.For<IFileSystem>();
+			fileSystem.ReadAllText("blinker.txt").Returns(".....\n.....\n.XXX.\n.....\n.....");
+			
 			var callbackCalled = 0;
+			var application = new Application(2, "blinker.txt")
+			{
+				OnGeneration = () => { callbackCalled++; },
+				FileSystem = fileSystem
+			};
+			application.Run();
 
-			GameOfLife.World.Evolve(2, "blinker.txt", () => { callbackCalled++; });
 			callbackCalled.Should().Be(2);
-			File.Exists("blinker-1.txt").Should().Be(true);
-			File.Exists("blinker-2.txt").Should().Be(true);
-			File.ReadAllText("blinker-1.txt").Should().Be(".....\n..X..\n..X..\n..X..\n.....");
-			File.ReadAllText("blinker-2.txt").Should().Be(".....\n.....\n.XXX.\n.....\n.....");
+			fileSystem.Received().WriteAllText("blinker-1.txt", ".....\n..X..\n..X..\n..X..\n.....");
+			fileSystem.Received().WriteAllText("blinker-2.txt", ".....\n.....\n.XXX.\n.....\n.....");
 		}
 
 		[Fact]
 		public void AcceptenceTest_Blinker1()
 		{
-			File.WriteAllText("blinker.txt", ".....\n.....\n.XXX.\n.....\n.....");
-			File.WriteAllText("blinker-2.txt", ".....\n.....\n.XXX.\n.....\n.....");
-			var callbackCalled = 0;
+			var fileSystem = Substitute.For<IFileSystem>();
+			fileSystem.ReadAllText("blinker.txt").Returns(".....\n.....\n.XXX.\n.....\n.....");
 
-			World.Evolve(1, "blinker.txt", () => { callbackCalled++; });
+			var callbackCalled = 0;
+			var application = new Application(1, "blinker.txt")
+			{
+				OnGeneration = () => { callbackCalled++; },
+				FileSystem = fileSystem
+			};
+			application.Run();
+
 			callbackCalled.Should().Be(1);
-			File.Exists("blinker-1.txt").Should().Be(true);
-			File.ReadAllText("blinker-1.txt").Should().Be(".....\n..X..\n..X..\n..X..\n.....");
-			File.Exists("blinker-2.txt").Should().Be(false);
+			fileSystem.Received().WriteAllText("blinker-1.txt", ".....\n..X..\n..X..\n..X..\n.....");
+			fileSystem.Received().DeleteFilesInDirectory(".", "blinker-*.txt");
 		}
 
 		[Fact]

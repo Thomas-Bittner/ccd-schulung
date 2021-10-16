@@ -37,31 +37,27 @@ namespace GameOfLife
 			set => _map[x, y] = value;
 		}
 
-		public static void Evolve(int numberOfGenerations, string seedWorldFilename, Action onGeneration)
+		public static void Evolve(int numberOfGenerations, string seedWorldFilename, Action onGeneration, IFileSystem fileSystem)
 		{
-			var currentWorld = FromFile(seedWorldFilename);
-			currentWorld.DeleteOldFiles();
+			var currentWorld = FromFile(seedWorldFilename, fileSystem);
+			currentWorld.DeleteOldFiles(fileSystem);
 
 			for (var i = 1; i <= numberOfGenerations; i++)
 			{
 				currentWorld = currentWorld.CalculateNextGeneration();
-				currentWorld.Save();
+				currentWorld.Save(fileSystem);
 				onGeneration();
 			}
 		}
 
-		private void DeleteOldFiles()
+		private void DeleteOldFiles(IFileSystem fileSystem)
 		{
-			var directory = new DirectoryInfo(".");
-			foreach (var file in directory.EnumerateFiles($"{Name}-*.txt"))
-			{
-				file.Delete();
-			}
+			fileSystem.DeleteFilesInDirectory(".", $"{Name}-*.txt");
 		}
 
-		public static World FromFile(string filename)
+		public static World FromFile(string filename, IFileSystem fileSystem)
 		{
-			var fileContent = File.ReadAllText(filename);
+			var fileContent = fileSystem.ReadAllText(filename);
 			var world = FromString(fileContent);
 			world.Name = Path.GetFileNameWithoutExtension(filename);
 			world.Generation = 0;
@@ -115,10 +111,10 @@ namespace GameOfLife
 			return result.Trim();
 		}
 
-		public void Save()
+		public void Save(IFileSystem fileSystem)
 		{
 			var filename = $"{Name}-{Generation}.txt";
-			File.WriteAllText(filename, this.ToString());
+			fileSystem.WriteAllText(filename, this.ToString());
 		}
 
 		public World CalculateNextGeneration()

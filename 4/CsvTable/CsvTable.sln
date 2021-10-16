@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvTable", "CsvTable\CsvTable.csproj", "{2A43BF4F-D26F-40CF-97BA-6C4B2E0FA1A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsvTable", "CsvTable\CsvTable.csproj", "{2A43BF4F-D26F-40CF-97BA-6C4B2E0FA1A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{AD615DBF-D67B-4113-822F-35B5986077F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{AD615DBF-D67B-4113-822F-35B5986077F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowCsv", "ShowCsv\ShowCsv.csproj", "{DCDB6E4E-7376-41BB-A46D-F9FA444FB621}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AD615DBF-D67B-4113-822F-35B5986077F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD615DBF-D67B-4113-822F-35B5986077F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD615DBF-D67B-4113-822F-35B5986077F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDB6E4E-7376-41BB-A46D-F9FA444FB621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDB6E4E-7376-41BB-A46D-F9FA444FB621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDB6E4E-7376-41BB-A46D-F9FA444FB621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDB6E4E-7376-41BB-A46D-F9FA444FB621}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
