@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmbrechenAlgorithmus", "UmbrechenAlgorithmus\UmbrechenAlgorithmus.csproj", "{C3D4E5FB-2FCF-45CE-A537-DADE0A7130FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{9D303AE5-CAD2-41AB-A483-34D473DFF818}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3D4E5FB-2FCF-45CE-A537-DADE0A7130FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D4E5FB-2FCF-45CE-A537-DADE0A7130FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D4E5FB-2FCF-45CE-A537-DADE0A7130FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D4E5FB-2FCF-45CE-A537-DADE0A7130FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D303AE5-CAD2-41AB-A483-34D473DFF818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D303AE5-CAD2-41AB-A483-34D473DFF818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D303AE5-CAD2-41AB-A483-34D473DFF818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D303AE5-CAD2-41AB-A483-34D473DFF818}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA54780D-9C9C-401B-BAF5-A53665A8EE66}
+	EndGlobalSection
+EndGlobal

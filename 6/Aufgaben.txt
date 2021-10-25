@@ -1,0 +1,8 @@
+Reflexion:
+
+ToDO 1:
+
+string[] ErstelleWortListe(string input);
+string[] LangeWorteZerschneiden(string wortListe, int maxZeilenlänge);
+string[] ErstelleZeilen(string[] wortListe, int maxZeilenlänge);
+string FügeZeilenZusammen(string[] zeilenListe)
