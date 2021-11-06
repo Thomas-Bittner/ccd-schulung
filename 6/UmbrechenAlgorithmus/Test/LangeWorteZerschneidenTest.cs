@@ -8,23 +8,15 @@ namespace Test
 {
 	public class LangeWorteZerschneidenTest
 	{
-		[Fact]
-		public void Test1()
-		{
-			var input = "";
-			var maxZeilenlänge = 10;
-
-			var result = input;
-			result.Should().Be("");
-		}
 
 		[Fact]
 		public void Test2()
 		{
 			var input = "x";
-			var maxZeilenlänge = 10;
+			var maxZeilenlänge = 1;
 
-			var result = input;
+			var result = input.Substring(0, maxZeilenlänge);
+
 			result.Should().Be("x");
 		}
 
@@ -34,7 +26,7 @@ namespace Test
 			var input = "xy";
 			var maxZeilenlänge = 1;
 
-			var result = new string[] { input.Substring(0, 1), input.Substring(1, 1) };
+			var result = new string[] { input.Substring(0, maxZeilenlänge), input.Substring(maxZeilenlänge, maxZeilenlänge) };
 
 			result.Should().Equal(new string[] { "x", "y" });
 		}
@@ -45,7 +37,7 @@ namespace Test
 			var input = "wxyz";
 			var maxZeilenlänge = 2;
 
-			var result = new string[] { input.Substring(0, 2), input.Substring(2, 2) };
+			var result = new string[] { input.Substring(0, maxZeilenlänge), input.Substring(maxZeilenlänge, maxZeilenlänge) };
 
 			result.Should().Equal(new string[] { "wx", "yz" });
 		}

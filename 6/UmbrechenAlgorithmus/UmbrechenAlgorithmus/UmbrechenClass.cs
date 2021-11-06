@@ -9,9 +9,15 @@ namespace UmbrechenAlgorithmus
 		public static string Umbrechen(string text, int maxZeilenlänge)
 		{
 			var worte = ErstelleWortListe(text);
+			string[] zeilen = Formatieren(maxZeilenlänge, worte);
+			return FügeZeilenZusammen(zeilen);
+		}
+
+		private static string[] Formatieren(int maxZeilenlänge, string[] worte)
+		{
 			var kurzeWorte = LangeWorteZerschneiden(worte, maxZeilenlänge);
 			var zeilen = ErstelleZeilen(kurzeWorte, maxZeilenlänge);
-			return FügeZeilenZusammen(zeilen);
+			return zeilen;
 		}
 
 		public static string[] LangeWorteZerschneiden(string[] worte, int maxZeilenlänge)
