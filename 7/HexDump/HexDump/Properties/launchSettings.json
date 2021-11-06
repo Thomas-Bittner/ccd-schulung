@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HexDump": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\ThomasBittner\\source\\repos\\ccd-schulung\\6\\Aufgaben.txt"
+    }
+  }
+}
