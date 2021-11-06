@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.IO;
 using System.Text;
 
@@ -20,38 +21,49 @@ namespace HexDump
           var charsRead = input.Read(buffer, 0, buffer.Length);
           if (charsRead > 0)
           {
-            result += string.Format("{0:x4}", position) + ": ";
+            result += PositionToHex(position);
+            result += ": ";
+
             position += charsRead;
 
             for (int i = 0; i < 16; i++)
             {
-              if (i < charsRead)
-              {
-                var hex = string.Format("{0:x2}", buffer[i]);
-                result += hex + " ";
-              }
-              else
-              {
-                result += "  ";
-              }
+              result += (i < charsRead) ? CharacterToHex(buffer[i]) + " " : "  ";
 
               if (i == 7)
               {
                 result += "-- ";
               }
-
-              if (buffer[i] < 32 || buffer[i] > 250)
-              {
-                buffer[i] = (byte)'.';
-              }
             }
 
-            var bufferContent = Encoding.ASCII.GetString(buffer);
-            result += "  " + bufferContent.Substring(0, charsRead) + "\n";
+            result += "  ";
+            result += BufferToString(buffer, charsRead);
+            result += "\n";
           }
         }
       }
       return result;
     }
-	}
+
+    private static string PositionToHex(int position)
+      => string.Format("{0:x4}", position);
+
+    private static string CharacterToHex(byte character)
+      => string.Format("{0:x2}", character);
+
+    private static string BufferToString(byte[] buffer, int charsRead)
+		{
+      foreach (ref var character in buffer.AsSpan())
+        character = ReplaceExoticCharacters(character);
+      var bufferContent = Encoding.ASCII.GetString(buffer);
+      return bufferContent.Substring(0, charsRead);
+		}
+
+    private static byte ReplaceExoticCharacters(byte character)
+    {
+      if (character < 32 || 250 < character)
+        return (byte)'.';
+      return character;
+    }
+  }
 }
