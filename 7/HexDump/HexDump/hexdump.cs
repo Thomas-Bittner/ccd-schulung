@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 
+using HexDump;
+
 namespace ancientcode
 {
   class MainClass
@@ -20,47 +22,8 @@ namespace ancientcode
         Environment.Exit(2);
       }
 
-      using (var input = File.OpenRead(args[0]))
-      {
-        int position = 0;
-        var buffer = new byte[16];
-
-        while (position < input.Length)
-        {
-          var charsRead = input.Read(buffer, 0, buffer.Length);
-          if (charsRead > 0)
-          {
-            Console.Write("{0}: ", string.Format("{0:x4}", position));
-            position += charsRead;
-
-            for (int i = 0; i < 16; i++)
-            {
-              if (i < charsRead)
-              {
-                var hex = string.Format("{0:x2}", buffer[i]);
-                Console.Write(hex + " ");
-              }
-              else
-              {
-                Console.Write("  ");
-              }
-
-              if (i == 7)
-              {
-                Console.Write("-- ");
-              }
-
-              if (buffer[i] < 32 || buffer[i] > 250)
-              {
-                buffer[i] = (byte)'.';
-              }
-            }
-
-            var bufferContent = Encoding.ASCII.GetString(buffer);
-            Console.WriteLine("  " + bufferContent.Substring(0, charsRead));
-          }
-        }
-      }
+      var fileAsHexDump = HexConverter.ToHexDump(args[0]);
+      Console.WriteLine(fileAsHexDump);
     }
   }
 }
